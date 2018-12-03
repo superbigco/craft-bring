@@ -1,0 +1,44 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Bring plugin for Craft CMS 3.x
+ *
+ * Bring index.twig
+ *
+ * @author    Superbig
+ * @copyright Copyright (c) 2018 Superbig
+ * @link      https://superbig.co
+ * @package   Bring
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Bring" %}
+
+{% block actionButton %}
+    <div class="buttons">
+        <a href="{{ url('bring/boxes/new') }}" class="btn submit add icon">{{ "Create Box"|t('bring') }}</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% if boxes|length %}
+        <table class="data">
+            <thead>
+            <tr>
+                <th>{{ "Name"|t('bring') }}</th>
+                <th>{{ "Handle"|t('bring') }}</th>d
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <!-- /.data -->
+    {% else %}
+        <p>{{ "No boxes created."|t('bring') }}</p>
+    {% endif %}
+{% endblock %}

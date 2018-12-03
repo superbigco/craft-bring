@@ -1,0 +1,42 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Bring plugin for Craft CMS 3.x
+ *
+ * Bring Settings.twig
+ *
+ * @author    Superbig
+ * @copyright Copyright (c) 2018 Superbig
+ * @link      https://superbig.co
+ * @package   Bring
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("superbig\\bring\\assetbundles\\bring\\BringAsset") %}
+
+{{ forms.textField({
+    label: 'API key',
+    instructions: 'Enter some setting here.',
+    id: 'apiKey',
+    name: 'apiKey',
+    value: settings['apiKey']})
+}}
+
+{{ forms.textField({
+    label: 'API Username',
+    instructions: 'Enter some setting here.',
+    id: 'apiUsername',
+    name: 'apiUsername',
+    value: settings['apiUsername']})
+}}
+
+{{ forms.textField({
+    label: 'Client Url',
+    instructions: 'Enter some setting here.',
+    id: 'apiClientUrl',
+    name: 'apiClientUrl',
+    value: settings['apiClientUrl']})
+}}

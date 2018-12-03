@@ -1,0 +1,42 @@
+{
+    "name": "superbig/craft-bring",
+    "description": "Integrate Bring/Posten with Craft Commerce",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "bring"
+    ],
+    "support": {
+        "docs": "https://github.com/superbigco/craft-bring/blob/master/README.md",
+        "issues": "https://github.com/superbigco/craft-bring/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Superbig",
+            "homepage": "https://superbig.co"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1",
+        "dvdoug/boxpacker": "^3.0.0",
+        "tightenco/collect": "^5.6.0|^5.7.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "superbig\\bring\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Bring",
+        "handle": "bring",
+        "hasCpSettings": true,
+        "hasCpSection": true,
+        "changelogUrl": "https://raw.githubusercontent.com/superbigco/craft-bring/master/CHANGELOG.md",
+        "class": "superbig\\bring\\Bring"
+    }
+}
