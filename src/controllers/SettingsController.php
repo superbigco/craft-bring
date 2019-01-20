@@ -14,41 +14,41 @@ use superbig\bring\Bring;
 
 use Craft;
 use craft\web\Controller;
+use craft\commerce\Plugin as Commerce;
 
 /**
  * @author    Superbig
  * @package   Bring
  * @since     1.0.0
  */
-class DeliveryPointsController extends Controller
+class SettingsController extends Controller
 {
 
     // Protected Properties
     // =========================================================================
 
-    /**
-     * @var    bool|array Allows anonymous access to this controller's actions.
-     *         The actions must be in 'kebab-case'
-     * @access protected
-     */
-    protected $allowAnonymous = ['info'];
-
     // Public Methods
     // =========================================================================
 
     /**
+     * @return \yii\web\Response
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionInfo(): \yii\web\Response
+    public function actionGetCustomerNumbers(): \yii\web\Response
     {
         $this->requireAcceptsJson();
         $this->requirePostRequest();
+        $this->requireAdmin();
 
-        $postalCode = Craft::$app->getRequest()->getRequiredParam('postalCode');
+        $order  = Commerce::getInstance()->cart->getCart();
+        $result = Bring::$plugin->shipping->getRates($order);
 
         return $this->asJson([
-            'success'     => true,
-            'information' => [],
+            'success' => !empty($result),
+            'rates'   => $result,
         ]);
     }
 }

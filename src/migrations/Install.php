@@ -16,6 +16,7 @@ use Craft;
 use craft\config\DbConfig;
 use craft\db\Migration;
 use superbig\bring\records\BoxRecord;
+use superbig\bring\records\ShipmentRecord;
 
 /**
  * @author    Superbig
@@ -101,6 +102,28 @@ class Install extends Migration
             );
         }
 
+        $tableSchema = Craft::$app->db->schema->getTableSchema(ShipmentRecord::TABLE_NAME);
+        if ($tableSchema === null) {
+            $tablesCreated = true;
+            $this->createTable(
+                ShipmentRecord::TABLE_NAME,
+                [
+                    'id'                => $this->primaryKey(),
+                    'dateCreated'       => $this->dateTime()->notNull(),
+                    'dateUpdated'       => $this->dateTime()->notNull(),
+                    'uid'               => $this->uid(),
+                    'orderId'           => $this->integer()->notNull(),
+                    'consignmentNumber' => $this->string()->notNull(),
+                    'labelUrl'          => $this->string()->notNull(),
+                    'request'           => $this->text(),
+                    'response'          => $this->text(),
+                    'shipped'           => $this->boolean()->defaultValue(true),
+                    'returned'          => $this->boolean()->defaultValue(true),
+                    'type'              => $this->string()->notNull()->defaultValue('shipment'),
+                ]
+            );
+        }
+
         return $tablesCreated;
     }
 
@@ -138,6 +161,16 @@ class Install extends Migration
             BoxRecord::TABLE_NAME,
             'siteId',
             '{{%sites}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(ShipmentRecord::TABLE_NAME, 'orderId'),
+            ShipmentRecord::TABLE_NAME,
+            'orderId',
+            '{{%elements}}',
             'id',
             'CASCADE',
             'CASCADE'

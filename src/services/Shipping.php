@@ -104,7 +104,7 @@ class Shipping extends Component
             'tocountry'           => 'NO',
 
             // Grams
-            'weight'              => 1500,
+            //'weight'              => 1500,
 
             // Tells whether the parcel is delivered at a post office when it is shipped. A surcharge will be applied for SERVICEPAKKE and BPAKKE_DOR-DOR
             'postingatpostoffice' => 'false',
@@ -189,7 +189,8 @@ class Shipping extends Component
             //'volumeSpecial' => false,
         ];
 
-        $packedOrderParameters = $this->packOrder($order);
+        $packedBoxes           = $this->packOrder($order);
+        $packedOrderParameters = $this->getPackageParameters($packedBoxes);
 
         //BringPlugin::log('Acessing ' . self::ENDPOINT . '/shippingguide/products/all.json', LogLevel::Trace);
         $result = Bring::$plugin->api->get('/shippingguide/v2/products', array_merge($options, $packedOrderParameters));
@@ -214,7 +215,6 @@ class Shipping extends Component
                 $products = $consigment['products'] ?? null;
 
                 return collect($products)
-                    ->dd()
                     ->filter(function($product) {
                         $hasErrors = !empty($product['errors']);
 
@@ -328,7 +328,7 @@ class Shipping extends Component
                     $lineItem->width,
                     $lineItem->length,
                     $lineItem->height,
-                    $lineItem->weight,
+                    (float)$lineItem->weight,
                     false);
             }
 
@@ -341,6 +341,7 @@ class Shipping extends Component
 
         //dump($items);
 
+        $packedBoxes = null;
         // $aReference, $aOuterWidth,$aOuterLength,$aOuterDepth,$aEmptyWeight,$aInnerWidth,$aInnerLength,$aInnerDepth,$aMaxWeight
         do {
             try {
@@ -385,7 +386,7 @@ class Shipping extends Component
         }
         */
 
-        return $this->getPackageParameters($packedBoxes);
+        return $packedBoxes;
     }
 
 

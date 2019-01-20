@@ -10,6 +10,7 @@
 
 namespace superbig\bring;
 
+use craft\commerce\elements\Order;
 use craft\commerce\events\RegisterAvailableShippingMethodsEvent;
 use craft\commerce\services\ShippingMethods;
 use craft\events\RegisterComponentTypesEvent;
@@ -167,6 +168,16 @@ class Bring extends Plugin
                 );
             }
         );
+
+
+        Craft::$app->getView()->hook('cp.commerce.order.edit.meta.order-info-table', function(&$context) {
+            /** @var Order $order */
+            $order    = $context['order'];
+            $booking  = self::$plugin->booking;
+            $shipment = $booking->getShipmentByOrderId($order->id);
+
+            return $booking->getShipmentInfoCode($shipment);
+        });
     }
 
     public function handleSiteRequest(): void

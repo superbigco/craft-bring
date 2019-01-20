@@ -1,0 +1,20 @@
+{% if shipment %}
+    <tr>
+        <td>
+            <strong>{{ "Shipment Label"|t('commerce') }} </strong>
+        </td>
+        <td>
+            <a href="{{ shipment.getPdfUrl() }}" target="_blank">Download PDF</a>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td>
+            <strong>{{ "Shipment Label"|t('commerce') }} </strong>
+        </td>
+        <td>
+            <button class="btn small js-createBringShipmentLabel">Create</button>
+            <!-- /.main submit -->
+        </td>
+    </tr>
+{% endif %}

@@ -14,13 +14,14 @@ use superbig\bring\Bring;
 
 use Craft;
 use craft\web\Controller;
+use craft\commerce\Plugin as Commerce;
 
 /**
  * @author    Superbig
  * @package   Bring
  * @since     1.0.0
  */
-class DeliveryPointsController extends Controller
+class BookingController extends Controller
 {
 
     // Protected Properties
@@ -39,16 +40,18 @@ class DeliveryPointsController extends Controller
     /**
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionInfo(): \yii\web\Response
+    public function actionBookShipment(): \yii\web\Response
     {
-        $this->requireAcceptsJson();
-        $this->requirePostRequest();
+        //$this->requireAcceptsJson();
+        //$this->requirePostRequest();
 
-        $postalCode = Craft::$app->getRequest()->getRequiredParam('postalCode');
+        $orderId = Craft::$app->getRequest()->getRequiredParam('orderId');
+        $order   = Commerce::getInstance()->getOrders()->getOrderById($orderId);
+        $result  = Bring::$plugin->booking->bookShipment($order);
 
         return $this->asJson([
-            'success'     => true,
-            'information' => [],
+            'success' => !empty($result),
+            'info'    => $result,
         ]);
     }
 }

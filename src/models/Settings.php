@@ -42,6 +42,10 @@ class Settings extends Model
 
     public $cache = false;
 
+    public $useStoreLocation = true;
+
+    public $eNotification = true;
+
     // Public Methods
     // =========================================================================
 

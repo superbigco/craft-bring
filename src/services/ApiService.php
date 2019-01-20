@@ -17,6 +17,7 @@ use DVDoug\BoxPacker\PackedBox;
 use DVDoug\BoxPacker\PackedBoxList;
 use DVDoug\BoxPacker\Packer;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use function GuzzleHttp\Psr7\build_query;
 use Psr\Http\Message\ResponseInterface;
 use superbig\bring\boxes\BringBox;
@@ -58,6 +59,8 @@ class ApiService extends Component
             $body     = (string)$response->getBody();
             $json     = Json::decodeIfJson($body);
 
+            //dd($url, $query, $json);
+
             //if (!empty($query)) {
             // $request->getQuery()->set()
             // }
@@ -69,6 +72,66 @@ class ApiService extends Component
 
 
             return $json;
+        } catch (BadResponseException $e) {
+            $requestBody  = (string)$e->getRequest()->getBody();
+            $responseBody = (string)$e->getResponse()->getBody();
+            dd([
+                'url'      => $url,
+                'error'    => $e->getMessage(),
+                'query'    => $query,
+                'request'  => Json::decodeIfJson($requestBody),
+                'response' => Json::decodeIfJson($responseBody),
+            ]);
+
+            return null;
+        } catch (\Exception $e) {
+            dd([
+                'url'   => $url,
+                'error' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
+    /**
+     * @param string $url
+     * @param array  $query
+     *
+     * @return array|null
+     */
+    public function post($url = '', $data = [])
+    {
+        try {
+            $client   = $this->getClient();
+            $response = $client->post($url, [
+                'json' => $data,
+            ]);
+            $body     = (string)$response->getBody();
+            $json     = Json::decodeIfJson($body);
+
+            //if (!empty($query)) {
+            // $request->getQuery()->set()
+            // }
+
+            // Cache the response
+            //craft()->fileCache->set($url, $json);
+            // Apply the limit and offset
+            //$items = array_slice($items, $offset, $limit);
+
+
+            return $json;
+        } catch (BadResponseException $e) {
+            $requestBody  = (string)$e->getRequest()->getBody();
+            $responseBody = (string)$e->getResponse()->getBody();
+            dd([
+                'url'      => $url,
+                'error'    => $e->getMessage(),
+                'request'  => Json::decodeIfJson($requestBody),
+                'response' => Json::decodeIfJson($responseBody),
+            ]);
+
+            return null;
         } catch (\Exception $e) {
             dd([
                 'url'   => $url,
